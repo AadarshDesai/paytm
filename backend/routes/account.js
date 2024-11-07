@@ -2,6 +2,7 @@ const express = require("express");
 const authMiddleware = require("../middleware");
 const { Account } = require("../db");
 const mongoose = require("mongoose");
+const { sendMoney } = require("../type");
 
 const router = express.Router();
 
@@ -17,19 +18,28 @@ router.get("/balance", authMiddleware, async function(req, res){
 
 router.post("/transfer", authMiddleware, async function(req, res){
     const session = await mongoose.startSession();
+    const body = req.body;
+    const parseBody = sendMoney.safeParse(body);
+
+    if(!parseBody.success){
+        res.status(411).json({
+            message: "Invalid amount"
+        });
+        return;
+    }
+
     session.startTransaction();
-    const {amount, to} = req.body;
 
     const account = await Account.findOne({userId: req.userId}).session(session);
 
-    if(!account || account.balance < amount){
+    if(!account || account.balance < body.amount){
         await session.abortTransaction();
         return res.status(400).json({
             message: "Insufficient Balance"
         });
     }
 
-    const toAccount = await Account.findOne({userId: to}).session(session);
+    const toAccount = await Account.findOne({userId: body.to}).session(session);
 
     if(!toAccount){
         await session.abortTransaction();
@@ -42,15 +52,15 @@ router.post("/transfer", authMiddleware, async function(req, res){
         userId: req.userId
     }, {
         $inc:{
-            balance: -amount
+            balance: - body.amount
         }
     }).session(session);
 
     await Account.updateOne({
-        userId: req.userId
+        userId: req.to
     }, {
         $inc: {
-            balance: amount
+            balance: body.amount
         }
     }).session(session);
 
