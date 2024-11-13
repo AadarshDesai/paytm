@@ -6,6 +6,7 @@ import { Heading } from "../components/Heading";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
 import { useNavigate } from "react-router-dom";
+import { PasswordInput } from "../components/PasswordInput";
 
 export const Signup = ()=> {
     const [firstName, setFirstName] = useState("");
@@ -30,7 +31,7 @@ export const Signup = ()=> {
                     <InputBox onChange={(e)=>{
                         setUsername(e.target.value);
                     }} placeholder="john.doe@gmail.com" label={"Email"}/>
-                    <InputBox onChange={(e)=>{
+                    <PasswordInput onChange={(e)=>{
                         setPassword(e.target.value);
                     }} placeholder="*******" label={"Password"}/>
                     <div className="pt-4">

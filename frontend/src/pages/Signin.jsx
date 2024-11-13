@@ -2,6 +2,7 @@ import { BottomWarning } from "../components/BottomWarning";
 import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
 import { InputBox } from "../components/InputBox";
+import { PasswordInput } from "../components/PasswordInput";
 import { SubHeading } from "../components/SubHeading";
 
 export const Signin = () => {
@@ -12,7 +13,7 @@ export const Signin = () => {
                     <Heading label={"Sign In"}/>
                     <SubHeading label={"Enter your credentials to acces your account"}/>
                     <InputBox placeholder={"jogn.doe@gmail.com"} label={"Email"}/>
-                    <InputBox placeholder="*******" label={"Password"}/>
+                    <PasswordInput placeholder="*******" label={"Password"}/>
                     <div className="pt-4">
                         <Button label={"Sign In"}/>
                     </div>
